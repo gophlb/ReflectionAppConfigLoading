@@ -6,47 +6,41 @@ namespace ReflectionLoading.Filters.RegexFilters.Tests
     [TestFixture]
     public class RemoveVowelsFilterTest : AbstractRegexFilterTest
     {
-       [SetUp]
+        [SetUp]
         public void Init()
         {
             filter = new RemoveVowelsFilter();
         }
 
 
-       
-        [Test]
-        public void FilterWithVowels()
-        {
-            string result = "";
 
-            try { result = filter.Filter("abEcdAAefg"); }
-            catch { result = "exception"; }
+        [Test]
+        [TestCase("abEcdAAefg")]
+        public void FilterWithVowels(string stringToFilter)
+        {
+            string result = filter.Filter(stringToFilter);
 
             Assert.AreEqual(result, "bcdfg");
         }
 
 
         [Test]
-        public void FilterNoVowels()
+        [TestCase("bcdfg")]
+        public void FilterNoVowels(string stringToFilter)
         {
-            string result = "";
-
-            try { result = filter.Filter("bcdfg"); }
-            catch { result = "exception"; }
+            string result = filter.Filter(stringToFilter);
 
             Assert.AreEqual(result, "bcdfg");
         }
 
 
         [Test]
-        public void FilterOnlyVowels()
+        [TestCase("aaAAaeiEaIou")]
+        public void FilterOnlyVowels(string stringToFilter)
         {
-            string result = "";
+            string result = filter.Filter(stringToFilter);
 
-            try { result = filter.Filter("aaAAaeiEaIou"); }
-            catch { result = "exception"; }
-
-            Assert.AreEqual(result, "");
+            Assert.AreEqual(result, string.Empty);
         }
 
     }

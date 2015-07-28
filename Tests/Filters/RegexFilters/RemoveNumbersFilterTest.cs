@@ -12,41 +12,35 @@ namespace ReflectionLoading.Filters.RegexFilters.Tests
             filter = new RemoveNumbersFilter();
         }
 
-                
-        [Test]
-        public void FilterWithNumbers()
-        {
-            string result = "";
 
-            try { result = filter.Filter("a0b1c2d3e4f5g6"); }
-            catch { result = "exception"; }
+        [Test]
+        [TestCase("a0b1c2d3e4f5g6")]
+        public void FilterWithNumbers(string stringToFilter)
+        {
+            string result = filter.Filter(stringToFilter);
 
             Assert.AreEqual(result, "abcdefg");
         }
 
 
         [Test]
-        public void FilterNoNumbers()
+        [TestCase("bcdfg")]
+        public void FilterNoNumbers(string stringToFilter)
         {
-            string result = "";
-
-            try { result = filter.Filter("bcdfg"); }
-            catch { result = "exception"; }
+            string result = filter.Filter(stringToFilter);
 
             Assert.AreEqual(result, "bcdfg");
         }
 
 
         [Test]
-        public void FilterOnlyNumbers()
+        [TestCase("1519485")]
+        public void FilterOnlyNumbers(string stringToFilter)
         {
-            string result = "";
+            string result = filter.Filter(stringToFilter);
 
-            try { result = filter.Filter("1519485"); }
-            catch { result = "exception"; }
-
-            Assert.AreEqual(result, "");
+            Assert.AreEqual(result, string.Empty);
         }
-        
+
     }
 }

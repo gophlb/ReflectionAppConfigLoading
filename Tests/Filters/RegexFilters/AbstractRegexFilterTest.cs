@@ -1,5 +1,6 @@
 ﻿using Filters;
 using NUnit.Framework;
+using System;
 
 namespace ReflectionLoading.Filters.RegexFilters.Tests
 {
@@ -10,26 +11,21 @@ namespace ReflectionLoading.Filters.RegexFilters.Tests
 
 
         [Test]
-        public void FilterNull()
+        [TestCase(null)]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void FilterNull(string stringToFilter)
         {
-            string result = "";
-
-            try { result = filter.Filter(null); }
-            catch { result = "exception"; }
-
-            Assert.AreEqual(result, "exception");
+            string result = filter.Filter(stringToFilter);
         }
 
 
         [Test]
-        public void FilterEmpty()
+        [TestCase("")]
+        public void FilterEmpty(string stringToFilter)
         {
-            string result = "";
+            string result = filter.Filter(stringToFilter);
 
-            try { result = filter.Filter(""); }
-            catch { result = "exception"; }
-
-            Assert.AreEqual(result, "");
+            Assert.AreEqual(result, string.Empty);
         }
     }
 }
