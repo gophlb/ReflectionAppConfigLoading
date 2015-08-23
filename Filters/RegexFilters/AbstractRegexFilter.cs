@@ -10,7 +10,7 @@ namespace Filters.RegexFilters
         
         public virtual string Filter(string target)
         {
-            if (target == null) { throw new ArgumentNullException(); }
+            if (target == null) { throw new ArgumentNullException("target", "No target string available to filter."); }
 
             return regex.Replace(target, "");
         }

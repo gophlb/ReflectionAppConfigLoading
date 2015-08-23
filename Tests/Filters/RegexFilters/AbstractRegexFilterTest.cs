@@ -4,22 +4,20 @@ using System;
 
 namespace ReflectionLoading.Filters.RegexFilters.Tests
 {
-
+    [TestFixture]
     public abstract class AbstractRegexFilterTest
     {
         protected IFilter filter { get; set; }
 
-
-        [Test]
+        
         [TestCase(null)]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void FilterNull(string stringToFilter)
         {
-            string result = filter.Filter(stringToFilter);
+            ArgumentNullException ex = Assert.Catch<ArgumentNullException>(() => filter.Filter(stringToFilter));
+            StringAssert.Contains("string available", ex.Message);
         }
 
 
-        [Test]
         [TestCase("")]
         public void FilterEmpty(string stringToFilter)
         {
