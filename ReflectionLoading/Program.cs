@@ -10,9 +10,9 @@ namespace ReflectionLoading
     {
         public static void Main(string[] args)
         {
-            FilterSection connectionManagerDataSection = ConfigurationManager.GetSection(FilterSection.SectionName) as FilterSection;
+            FilterSection filterDataSection = ConfigurationManager.GetSection(FilterSection.SectionName) as FilterSection;
             
-            if (connectionManagerDataSection != null)
+            if (filterDataSection != null)
             {
                 string stringToFilter = "a-13-fsv_5A!!__$_/";
                 IFilter filter;
@@ -21,7 +21,8 @@ namespace ReflectionLoading
 
                 Console.WriteLine(String.Format("Original string: {0}", stringToFilter));
 
-                foreach (FilterElement filterElement in connectionManagerDataSection.Filters)
+                string message = "";
+                foreach (FilterElement filterElement in filterDataSection.Filters)
                 {
                     try
                     {
@@ -29,16 +30,20 @@ namespace ReflectionLoading
                         filterType = assembly.GetType(filterElement.FullPathClass);
                         filter = Activator.CreateInstance(filterType) as IFilter;
 
-                        if (filter != null) 
-                        { 
-                            stringToFilter = filter.Filter(stringToFilter);                             
-                            Console.WriteLine(String.Format("{0}: {1}", filterElement.Name, stringToFilter));
+                        if (filter != null)
+                        {
+                            stringToFilter = filter.Filter(stringToFilter);
+                            message = String.Format("{0}: {1}", filterElement.Name, stringToFilter);
                         }
-                        else { Console.WriteLine(String.Format("There was an error while building the filter {0}", filterElement.Name)); }
+                        else { message = String.Format("There was an error while building the filter {0}", filterElement.Name); }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(String.Format("There was an error with filter {0}: {1}", filterElement.Name, ex.Message));
+                        message = String.Format("There was an error with filter {0}: {1}", filterElement.Name, ex.Message);
+                    }
+                    finally
+                    {
+                        Console.WriteLine(message);
                     }
                 }
 
