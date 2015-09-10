@@ -7,23 +7,25 @@ namespace ReflectionLoading.Filters.RegexFilters.Tests
     [TestFixture]
     public abstract class AbstractRegexFilterTest
     {
-        protected IFilter filter { get; set; }
+        protected abstract IFilter GetFilter();
 
-        
+
+        [TestCase(null, ExpectedException = typeof(ArgumentNullException), TestName = "FilterNull")]
+        [TestCase("", ExpectedResult = "", TestName = "FilterEmpty")]
+        public string FilterNull(string stringToFilter)
+        {
+            IFilter filter = GetFilter();
+            return filter.Filter(stringToFilter);            
+        }
+
+        /*
         [TestCase(null)]
         public void FilterNull(string stringToFilter)
         {
+            IFilter filter = GetFilter();
             ArgumentNullException ex = Assert.Catch<ArgumentNullException>(() => filter.Filter(stringToFilter));
             StringAssert.Contains("string available", ex.Message);
         }
-
-
-        [TestCase("")]
-        public void FilterEmpty(string stringToFilter)
-        {
-            string result = filter.Filter(stringToFilter);
-
-            Assert.AreEqual(result, string.Empty);
-        }
+        */
     }
 }

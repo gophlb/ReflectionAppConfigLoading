@@ -1,46 +1,25 @@
 ﻿using NUnit.Framework;
 using Filters.RegexFilters;
+using Filters;
 
 namespace ReflectionLoading.Filters.RegexFilters.Tests
 {
     [TestFixture]
     public class RemoveNumbersFilterTest : AbstractRegexFilterTest
     {
-        [SetUp]
-        public void Init()
+        override protected IFilter GetFilter()
         {
-            filter = new RemoveNumbersFilter();
+            return new RemoveNumbersFilter();
         }
 
 
-        [Test]
-        [TestCase("a0b1c2d3e4f5g6")]
-        public void FilterWithNumbers(string stringToFilter)
-        {
-            string result = filter.Filter(stringToFilter);
-
-            Assert.AreEqual(result, "abcdefg");
+        [TestCase("a0b1c2d3e4f5g6", ExpectedResult = "abcdefg", TestName = "FilterWithNumbers")]
+        [TestCase("bcdfg", ExpectedResult = "bcdfg", TestName = "FilterNoNumbers")]
+        [TestCase("1519485", ExpectedResult = "", TestName = "FilterOnlyNumbers")]
+        public string FilterTest(string stringToFilter)
+        {            
+            IFilter filter = GetFilter();
+            return filter.Filter(stringToFilter);
         }
-
-
-        [Test]
-        [TestCase("bcdfg")]
-        public void FilterNoNumbers(string stringToFilter)
-        {
-            string result = filter.Filter(stringToFilter);
-
-            Assert.AreEqual(result, "bcdfg");
-        }
-
-
-        [Test]
-        [TestCase("1519485")]
-        public void FilterOnlyNumbers(string stringToFilter)
-        {
-            string result = filter.Filter(stringToFilter);
-
-            Assert.AreEqual(result, string.Empty);
-        }
-
     }
 }
